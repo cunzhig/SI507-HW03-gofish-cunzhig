@@ -1,4 +1,5 @@
 # SI507-HW03-gofish-cunzhig
+note:assume all input are valid (only intger)
 name: Cunzhi Gao  
 unique name: cunzhig  
 section: 003  
