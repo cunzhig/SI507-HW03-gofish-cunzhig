@@ -137,9 +137,13 @@ class Hand:
 	# side effect: the deck will be depleted by one card
 	# param: the deck from which to draw
 	# returns: nothing
-	def draw(self, deck):
-		self.add_card(deck.pop_card())
-	
+	def draw(self, deck,rank):
+		c = deck.pop_card()
+		self.add_card(c)
+		print(c.rank_num)
+		if c.rank_num==rank:
+			return 0
+		return 1
 	# looks for pairs of cards in a hand and removes them.
 	# param: nothing
 	# return: nothing
@@ -165,12 +169,20 @@ class Hand:
 	def display(self):
 		for card in self.cards:
 			print(card)
+	#check the input rank 
+	def check(self,number):
+		for card in self.cards:
+			if number==card.rank_num:
+			    return 0
+		return 1
 	
 	# steal card from other player
 	# param: hand - other player's hand
 	#		 rank - the desired rank 
 	# return: True - if desired rank is in hand
 	#		  False - if desired rank not in hand
+	#def rank_change(number):
+	    
 	def go_fish(self,hand,rank):
 		flag = 0
 		for card in hand.cards:
@@ -212,17 +224,16 @@ def start_game():
 	player = {"-1":"Player 1", "1": "Player 2"}
 	# initialize deck and hands
 	deck = Deck()
-	# for i in range(26):
-	# 	deck.pop_card()
+	# for i in range(36):
+	#  	deck.pop_card()
 	deck.shuffle()
 
 	handlist = deck.deal(2,7)
 	hand1 = Hand(handlist[0])
 	hand2 = Hand(handlist[1])
-	score1 = 0
-	score2 = 0
-	#while len(deck.cards) != 0:
-	while len(deck.cards) != 0:
+	print(type(hand2))
+
+	while len(deck.cards) != 0 or len(hand1.cards) != 0 or len(hand2.cards) != 0:
 		print("****************")
 		print("Player 1 has: ")
 		hand1.display()
@@ -234,24 +245,54 @@ def start_game():
 		print("****************")
 		print(player[str(turn)]+"'s turn")
 		print("****************")
-		rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))
-		if turn == -1:
-			while hand1.go_fish(hand2,rank):
-				rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))
-			# remomve 4 same cards
+		while turn == -1:
 			hand1.remove_four()
-			# draw from deck
-			print("Player 1 draw one card from the deck ...")
-			hand1.draw(deck)
-		# if Player 2's turn
-		if turn == 1:
-			while hand2.go_fish(hand1,rank):
-				rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))
-			# remomve 4 same cards
-			hand2.remove_four()
-			# draw from deck
-			print("Player 2 draw one card from the deck ...")
-			hand2.draw(deck)
+			rank=0
+			if len(hand1.cards)!=0:
+			    while hand1.check(rank):
+				    rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))
+					
+			while hand1.go_fish(hand2,rank) and len(hand1.cards)!=0:
+				# remove 4 same cards
+				hand1.remove_four()
+				print("Player 1 has: ")
+				hand1.display()
+				rank=0				
+				if len(hand1.cards)!=0:
+				    while hand1.check(rank):
+				        rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))
+			
+			if len(deck.cards) != 0:
+				print("Player 1 draw one card from the deck ...")
+				c1=hand1.draw(deck,rank)
+			if c1:
+				break
+
+
+	# if Player 2's turn
+		while turn == 1:
+		    hand2.remove_four()
+		    rank=0			
+		    if len(hand2.cards)!=0:
+		        while hand2.check(rank):
+			        rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))				    
+					
+		    while hand2.go_fish(hand1,rank):
+			    # remomve 4 same cards
+			    hand2.remove_four()
+			    print("Player 2 has: ")
+			    hand2.display()
+			    rank=0				
+			    if len(hand2.cards) != 0:
+			        while hand2.check(rank):
+			            rank = int(input("Please choose a card rank you would like to ask the other player if they have (between 1-13): "))
+			
+		    # draw from deck
+		    if len(deck.cards) != 0:
+			    print("Player 2 draw one card from the deck ...")
+			    c2 = hand2.draw(deck,rank)
+		    if c2:
+			    break
 		
 		# Result
 		print("Player1 Score: "+str(hand1.score))
