@@ -136,14 +136,12 @@ class Hand:
 	# draw a card from a deck and add it to the hand
 	# side effect: the deck will be depleted by one card
 	# param: the deck from which to draw
-	# returns: nothing
-	def draw(self, deck,rank):
+	# returns: rank_num
+	def draw(self, deck):
 		c = deck.pop_card()
 		self.add_card(c)
-		print(c.rank_num)
-		if c.rank_num==rank:
-			return 0
-		return 1
+		return c.rank_num
+
 	
 	# looks for pairs of cards in a hand and removes them.
 	# param: nothing
@@ -260,8 +258,8 @@ def autoplay():
 			# draw from deck
 			if len(deck.cards) != 0:
 				print("Player 1 draw one card from the deck ...")
-				c1=hand1.draw(deck,rank)
-			if c1:
+				c1=hand1.draw(deck)
+			if c1!=rank:
 				break
 		# if Player 2's turn
 		while turn == 1:
@@ -274,15 +272,15 @@ def autoplay():
 				# remomve 4 same cards
 				hand2.remove_four()
 				rank=0			
-				if len(hand1.cards)!=0:				
+				if len(hand2.cards)!=0:				
 					while hand2.check(rank):
 						rank = random.choice(hand2.cards).rank_num
 			
 			# draw from deck
 			if len(deck.cards) != 0:
 				print("Player 2 draw one card from the deck ...")
-				c2=hand2.draw(deck,rank)
-			if c2:
+				c2=hand2.draw(deck)
+			if c2!=rank:
 				break
 		
 		# Result
