@@ -136,14 +136,12 @@ class Hand:
 	# draw a card from a deck and add it to the hand
 	# side effect: the deck will be depleted by one card
 	# param: the deck from which to draw
-	# returns: nothing
-	def draw(self, deck,rank):
+	# returns: rank_num
+	def draw(self, deck):
 		c = deck.pop_card()
 		self.add_card(c)
-		print(c.rank_num)
-		if c.rank_num==rank:
-			return 0
-		return 1
+		return c.rank_num
+
 	# looks for pairs of cards in a hand and removes them.
 	# param: nothing
 	# return: nothing
@@ -264,8 +262,8 @@ def start_game():
 			
 			if len(deck.cards) != 0:
 				print("Player 1 draw one card from the deck ...")
-				c1=hand1.draw(deck,rank)
-			if c1:
+				c1=hand1.draw(deck)
+			if c1!=rank:
 				break
 
 
@@ -290,8 +288,8 @@ def start_game():
 		    # draw from deck
 		    if len(deck.cards) != 0:
 			    print("Player 2 draw one card from the deck ...")
-			    c2 = hand2.draw(deck,rank)
-		    if c2:
+			    c2 = hand2.draw(deck)
+		    if c2!=rank:
 			    break
 		
 		# Result
