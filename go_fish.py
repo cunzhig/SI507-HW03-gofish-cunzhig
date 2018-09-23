@@ -266,8 +266,86 @@ def start_game():
 		print("Draw")
 
 
-#Start game
-start_game()
+def autoplay():
+	# player1 : -1, player2: 1
+	turn = -1
+	player = {"-1":"Player 1", "1": "Player 2"}
+	# initialize deck and hands
+	deck = Deck()
+	# for i in range(26):
+	# 	deck.pop_card()
+	deck.shuffle()
+
+	handlist = deck.deal(2,7)
+	hand1 = Hand(handlist[0])
+	hand2 = Hand(handlist[1])
+	#while len(deck.cards) != 0:
+	while len(deck.cards) != 0 or len(hand1.cards) != 0 or len(hand2.cards) != 0:
+		print("****************")
+		print("Player 1 has: ")
+		hand1.display()
+		print("****************")
+		print("Player 2 has: ")
+		hand2.display()
+		# Ask input
+		# if Player 1's turn
+		print("****************")
+		print(player[str(turn)]+"'s turn")
+		print("****************")
+		if turn == -1:
+			hand1.remove_four()
+			if len(hand1.cards)!=0:
+				rank = random.choice(hand1.cards).rank_num
+			while hand1.go_fish(hand2,rank) and len(hand1.cards)!=0:
+				# remomve 4 same cards
+				hand1.remove_four()
+				if len(hand1.cards)!=0:
+					rank = random.choice(hand1.cards).rank_num
+			# draw from deck
+			if len(deck.cards) != 0:
+				print("Player 1 draw one card from the deck ...")
+				hand1.draw(deck)
+		# if Player 2's turn
+		if turn == 1:
+			hand2.remove_four()
+			if len(hand2.cards)!=0:
+				rank = random.choice(hand2.cards).rank_num
+			while hand2.go_fish(hand1,rank) and len(hand2.cards)!=0:
+				# remomve 4 same cards
+				hand2.remove_four()
+				if len(hand2.cards)!=0:
+					rank = random.choice(hand2.cards).rank_num
+			
+			# draw from deck
+			if len(deck.cards) != 0:
+				print("Player 2 draw one card from the deck ...")
+				hand2.draw(deck)
+		
+		# Result
+		print("Player1 Score: "+str(hand1.score))
+		print("Player2 Score: "+str(hand2.score))
+		# change turn
+		turn = turn * -1
+	
+	# fianl result
+	# print("****************")
+	# print("Player 1 has: ")
+	# hand1.display()
+	# print("****************")
+	# print("Player 2 has: ")
+	# hand2.display()
+	# print("Player1 Score: "+str(hand1.score))
+	# print("Player2 Score: "+str(hand2.score))
+	if hand1.score > hand2.score:
+		print("Player1 wins")
+	elif hand1.score < hand2.score:
+		print("Player2 wins")
+	else:
+		print("Draw")
+
+	
+autoplay()
+
 
 
 
