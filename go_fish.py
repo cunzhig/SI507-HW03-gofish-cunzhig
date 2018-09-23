@@ -326,16 +326,7 @@ def autoplay():
 		print("Player2 Score: "+str(hand2.score))
 		# change turn
 		turn = turn * -1
-	
-	# fianl result
-	# print("****************")
-	# print("Player 1 has: ")
-	# hand1.display()
-	# print("****************")
-	# print("Player 2 has: ")
-	# hand2.display()
-	# print("Player1 Score: "+str(hand1.score))
-	# print("Player2 Score: "+str(hand2.score))
+		
 	if hand1.score > hand2.score:
 		print("Player1 wins")
 	elif hand1.score < hand2.score:
